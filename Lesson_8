@@ -1,0 +1,80 @@
+# Функция для добавления новой записи в справочник
+def add_contact():
+    name = input("Введите имя:")
+    surname = input("Введите фамилию:")
+    patronymic = input("Введите отчество:")
+    phone = input("Введите номер телефона:")
+    new_contact = f"{surname} {name} {patronymic} {phone}"
+    with open("contacts.txt", "a") as file:
+        file.write(new_contact + "\n")
+    print("Контакт добавлен!")
+
+# Функция для вывода всех записей в справочнике
+def show_all():
+    with open("contacts.txt", "r") as file:
+        contacts = file.readlines()
+    if not contacts:
+        print("Справочник пуст!")
+    else:
+        for contact in contacts:
+            print(contact.strip())
+
+# Функция для поиска записи в справочнике по заданному параметру
+def search_contact():
+    param = input("Введите параметр для поиска контакта:")
+    with open("contacts.txt", "r") as file:
+        contacts = file.readlines()
+    found = False
+    for contact in contacts:
+        data = contact.strip().split()
+        if param.lower() in [i.lower() for i in data]:
+            print(contact.strip())
+            found = True
+    if not found:
+        print("Контакт не найден!")
+
+# Функция для экспорта всех записей из справочника в текстовый файл
+def export_contacts():
+    with open("contacts.txt", "r") as file:
+        contacts = file.read()
+    with open("exported_contacts.txt", "w") as file:
+        file.write(contacts)
+    print("Справочник экспортирован!")
+
+# Функция для импорта записей из текстового файла в справочник
+def import_contacts():
+    file_path = input("Введите путь к файлу для импорта:")
+    try:
+        with open(file_path, "r") as file:
+            contacts = file.readlines()
+        with open("contacts.txt", "a") as file:
+            for contact in contacts:
+                file.write(contact)
+        print("Справочник импортирован!")
+    except FileNotFoundError:
+        print("Файл не найден!")
+
+# Основная функция для запуска программы
+def run():
+    while True:
+        action = input("\nВыберите действие:\n1. Добавить контакт\n2. Показать все контакты\n3. "
+                       "Поиск контакта\n4. Экспорт справочника\n5. Импорт справочника\n6. Выход\n")
+        if action == "1":
+            add_contact()
+        elif action == "2":
+            show_all()
+        elif action == "3":
+            search_contact()
+        elif action == "4":
+            export_contacts()
+        elif action == "5":
+            import_contacts()
+        elif action == "6":
+            break
+        else:
+            print("Некорректный ввод!")
+    print("Программа завершена.")
+
+
+# Запускаем программу
+run()
